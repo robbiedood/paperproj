@@ -1,8 +1,9 @@
 import ConversionRate from '../components/ConversionRate';
+import ConversionRatePlus from '../components/ConversionRatePlus';
 
 const Home = () => (
   <div>
-    <ConversionRate/>
+    <ConversionRatePlus/>
   </div>
 );
 

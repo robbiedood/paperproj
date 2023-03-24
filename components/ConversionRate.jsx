@@ -5,8 +5,11 @@ import axios from "axios";
 import { coingecko } from "../pages/api/index";
 
 const ConversionRate = () => {
-  const [conversionRate, setConversionRate] = useState(0);
+  const [conversionRate, setConversionRate] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
+
+  const [amount, setAmount] = useState(1);
+
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
 
   useEffect(() => {
@@ -33,12 +36,31 @@ const ConversionRate = () => {
     setSelectedCurrency(event.target.value);
   };
 
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value);
+  };
+
+  const convertedAmount = conversionRate && amount ? amount * conversionRate : null;
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-black">
-      <h1 className="text-3xl font-bold text-gray-500">Conversion Rate</h1>
-      <div className="flex items-center">
-        <p className="text-lg font-b text-gray-300">1 ETH =</p>
-        <h2 className="ml-2 text-2xl font-bold text-indigo-600">{conversionRate} {selectedCurrency}</h2>
+    <div className="flex flex-col items-center lg:justify-center bg-black h-screen">
+      <h1 className="text-3xl font-bold text-gray-500 mt-8 lg:mt-0">ETH to Fiat Converter</h1>
+      <div className="flex flex-col items-center">
+      <label htmlFor="amount">Amount:</label>
+      <input 
+        type="number" 
+        id="amount" 
+        name="desiredAmount" //name needs to add a random string to avoid browser autocomplete
+        autoComplete="0xoff" // also, autoComplete needs to turn off with a random string as well.
+        value={amount} 
+        onChange={handleAmountChange} 
+        className="block w-full text-center px-4 py-4 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm lg:text-2xl"
+      />
+
+        <h2 className="ml-2 text-2xl font-bold text-indigo-600 mt-4">
+        {(convertedAmount!=null) ? <p>{amount} ETH is worth {convertedAmount.toFixed(2)} {selectedCurrency}</p>
+          : <p>Please give an amount</p>}
+        </h2>
       </div>
       <p className="mt-2 text-gray-600">Last updated (PST): {lastUpdated}</p>
       <label htmlFor="currency" className="mt-4 text-gray-500">Select a currency:</label>
